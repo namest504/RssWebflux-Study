@@ -15,46 +15,46 @@ public class RssDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RssRootResponse {
-        public Rss rss;
+        private Rss rss;
     }
 
     @Getter
     @Setter
     public static class Rss {
-        public Channel channel;
+        private Channel channel;
     }
 
     @Getter
     @Setter
     public static class Channel {
-        public String title;
-        public String link;
-        public String description;
-        public String language;
-        public String pubDate;
-        public String lastBuildDate;
-        public Image image;
-        public ArrayList<Item> item = new ArrayList<>();
+        private String title;
+        private String link;
+        private String description;
+        private String language;
+        private String pubDate;
+        private String lastBuildDate;
+        private Image image;
+        private ArrayList<Item> item = new ArrayList<>();
     }
 
     @Getter
     @Setter
     public static class Image {
-        public String title;
-        public String url;
-        public String link;
-        public String description;
+        private String title;
+        private String url;
+        private String link;
+        private String description;
     }
 
     @Getter
     @Setter
     public static class Item {
-        public String title;
-        public String link;
-        public String description;
-        public String author;
-        public Long guid;
-        public String comments;
-        public String pubDate;
+        private String title;
+        private String link;
+        private String description;
+        private String author;
+        private Long guid;
+        private String comments;
+        private String pubDate;
     }
 }
