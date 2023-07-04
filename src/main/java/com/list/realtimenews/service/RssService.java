@@ -41,7 +41,6 @@ public class RssService {
         this.rssChannelRepository = rssChannelRepository;
         this.rssImageRepository = rssImageRepository;
         this.rssItemRepository = rssItemRepository;
-
     }
 
     public Mono<String> getRssXML() {
@@ -66,7 +65,7 @@ public class RssService {
     }
 
     public Mono<RssChannel> getRssChannel(Mono<RssRootResponse> rssRootResponseMono) {
-        return rssRootResponseMono.flatMap( x -> Mono.just(RssChannel.of(x.getRss().getChannel())));
+        return rssRootResponseMono.flatMap(x -> Mono.just(RssChannel.of(x.getRss().getChannel())));
     }
 
     public Mono<RssImage> getRssImage(Mono<RssRootResponse> rssRootResponseMono) {
@@ -92,33 +91,33 @@ public class RssService {
 
     public Mono<RssChannel> saveRssChannel(Mono<RssChannel> rssChannel) {
         log.info("saveRssChannel 실행");
-        return rssChannel.flatMap( r ->
+        return rssChannel.flatMap(r ->
                 rssChannelRepository.save(RssChannel.builder()
-                            .title(r.getTitle())
-                            .link(r.getLink())
-                            .description(r.getDescription())
-                            .language(r.getLanguage())
-                            .pubDate(r.getPubDate())
-                            .lastBuildDate(r.getLastBuildDate())
-                            .build()));
+                        .title(r.getTitle())
+                        .link(r.getLink())
+                        .description(r.getDescription())
+                        .language(r.getLanguage())
+                        .pubDate(r.getPubDate())
+                        .lastBuildDate(r.getLastBuildDate())
+                        .build()));
     }
 
     public Mono<RssImage> saveRssImage(Mono<RssImage> rssImage) {
         log.info("saveRssImage 실행");
-        return rssImage.flatMap( r ->
-            rssImageRepository.save(RssImage.builder()
-                            .title(r.getTitle())
-                            .url(r.getUrl())
-                            .link(r.getLink())
-                            .description(r.getDescription())
-                    .build())
+        return rssImage.flatMap(r ->
+                rssImageRepository.save(RssImage.builder()
+                        .title(r.getTitle())
+                        .url(r.getUrl())
+                        .link(r.getLink())
+                        .description(r.getDescription())
+                        .build())
         );
     }
 
     public Flux<RssItem> saveRssItem(Mono<List<RssItem>> rssItems) {
         log.info("saveRssItem 실행");
         return rssItems.flatMapMany(Flux::fromIterable)
-                .flatMap( r -> rssItemRepository.save(r));
+                .flatMap(r -> rssItemRepository.save(r));
 
     }
 }
