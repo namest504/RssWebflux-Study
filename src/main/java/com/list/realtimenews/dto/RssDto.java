@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class RssDto {
@@ -34,7 +35,7 @@ public class RssDto {
         private String pubDate;
         private String lastBuildDate;
         private Image image;
-        private ArrayList<Item> item = new ArrayList<>();
+        private List<Item> item = new ArrayList<>();
     }
 
     @Getter
