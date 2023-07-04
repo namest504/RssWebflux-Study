@@ -1,5 +1,6 @@
 package com.list.realtimenews.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.list.realtimenews.dto.RssDto.RssRootResponse;
 import org.json.XML;
@@ -25,7 +26,7 @@ public class RssService {
 
     public Mono<String> getRssXML() {
         return webClient.get()
-                .uri("https://rss.etnews.com/Section901.xml")
+                .uri("http://myhome.chosun.com/rss/www_section_rss.xml")
                 .retrieve()
                 .bodyToMono(String.class);
     }
@@ -34,7 +35,9 @@ public class RssService {
         return xmlString.flatMap(xml -> {
             String string = XML.toJSONObject(xml).toString();
             try {
-                RssRootResponse rssRootResponse = objectMapper.readValue(string, RssRootResponse.class);
+                RssRootResponse rssRootResponse = objectMapper
+                        .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+                        .readValue(string, RssRootResponse.class);
                 return Mono.just(rssRootResponse);
             } catch (IOException e) {
                 return Mono.error(new RuntimeException(e));
