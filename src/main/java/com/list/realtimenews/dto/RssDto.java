@@ -15,6 +15,16 @@ public class RssDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class RssData {
+        private String title;
+        private String category;
+        private String link;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class RssRootResponse {
         private Rss rss;
     }
