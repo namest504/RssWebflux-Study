@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.list.realtimenews.dto.RssDto;
 import com.list.realtimenews.dto.RssDto.Item;
 import com.list.realtimenews.dto.RssDto.RssRootResponse;
+import com.list.realtimenews.handler.RssHandler;
 import com.list.realtimenews.repository.RssChannelRepository;
 import com.list.realtimenews.repository.RssImageRepository;
 import com.list.realtimenews.repository.RssItemRepository;
@@ -30,24 +31,35 @@ public class RssService {
 
     private WebClient webClient;
     private ObjectMapper objectMapper;
+    private RssHandler rssHandler;
     private RssChannelRepository rssChannelRepository;
     private RssImageRepository rssImageRepository;
     private RssItemRepository rssItemRepository;
 
     @Autowired
-    public RssService(WebClient webClient, ObjectMapper objectMapper, RssChannelRepository rssChannelRepository, RssImageRepository rssImageRepository, RssItemRepository rssItemRepository) {
+    public RssService(WebClient webClient, ObjectMapper objectMapper, RssChannelRepository rssChannelRepository, RssImageRepository rssImageRepository, RssItemRepository rssItemRepository, RssHandler rssHandler) {
         this.webClient = webClient;
         this.objectMapper = objectMapper;
+        this.rssHandler = rssHandler;
         this.rssChannelRepository = rssChannelRepository;
         this.rssImageRepository = rssImageRepository;
         this.rssItemRepository = rssItemRepository;
     }
 
-    public Mono<String> getRssXML() {
-        return webClient.get()
-                .uri("http://myhome.chosun.com/rss/www_section_rss.xml")
-                .retrieve()
-                .bodyToMono(String.class);
+//    public Mono<String> getRssXML() {
+//        return webClient.get()
+//                .uri("http://myhome.chosun.com/rss/www_section_rss.xml")
+//                .retrieve()
+//                .bodyToMono(String.class);
+//    }
+
+    public Mono<List<String>> getRssXML() {
+        return rssHandler.getRssLink().flatMap(r ->
+                webClient.get()
+                        .uri("http://myhome.chosun.com/rss/www_section_rss.xml")
+                        .retrieve()
+                        .bodyToMono(String.class)
+        ).collectList();
     }
 
     public Mono<RssRootResponse> convertXMLToPOJO(Mono<String> xmlString) {
@@ -118,6 +130,5 @@ public class RssService {
         log.info("saveRssItem 실행");
         return rssItems.flatMapMany(Flux::fromIterable)
                 .flatMap(r -> rssItemRepository.save(r));
-
     }
 }
